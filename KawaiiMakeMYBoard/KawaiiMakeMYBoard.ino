@@ -37,49 +37,20 @@ void loop()
   Serial.println("loop");
   M5.Lcd.printf("loop");
 
-  for (int i = 0; i < 25; i++) {
-    land->on(i);
-    land->update();
-    grass_front->on(i);
+  grass_front->setLeftToRight();
+
+  for (int i = 0; i < 11; i++) {
+    grass_front->next();
     grass_front->update();
-    grass_middle->on(i);
-    grass_middle->update();
-    tree->on(i);
-    tree->update();
-    delay(100);
+    delay(70);
   }
 
-  for (int brightness = 1; brightness < 16; brightness++) {
-    land->config(brightness);
-    grass_front->config(brightness);
-    grass_middle->config(brightness);
-    tree->config(brightness);
-    delay(100);
-  }
+  grass_front->setRightToLeft();
 
-  for (int brightness = 16; brightness >= 1; brightness--) {
-    land->config(brightness);
-    grass_front->config(brightness);
-    grass_middle->config(brightness);
-    tree->config(brightness);
-    delay(100);
-  }
-
-  for (int i = 0; i < 25; i++) {
-    land->off(i);
-    land->update();
-    grass_front->off(i);
+  for (int i = 0; i < 11; i++) {
+    grass_front->next();
     grass_front->update();
-    grass_middle->off(i);
-    grass_middle->update();
-    tree->off(i);
-    tree->update();
-    delay(100);
+    delay(70);
   }
 
-  int brightness = 1;
-  land->config(brightness);
-  grass_front->config(brightness);
-  grass_middle->config(brightness);
-  tree->config(brightness);
 }

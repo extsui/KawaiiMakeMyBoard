@@ -10,11 +10,19 @@ public:
   void config(uint8_t brightness);
   void on(uint8_t index);
   void off(uint8_t index);
+
+  void setLeftToRight(void);
+  void setRightToLeft(void);
+  
   void update();
+  void next();
 
 private:
   uint8_t m_addr;
   uint8_t m_data[GRASS_LED_NUM];
+
+  uint8_t m_state;
+  uint8_t m_index;
 };
 
 #endif /* GRASS_H */

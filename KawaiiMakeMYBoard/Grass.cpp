@@ -37,6 +37,72 @@ void Grass::off(uint8_t index)
   m_data[index] = 0;
 }
 
+/**
+ * 草LED配置
+ * 
+ * D3      D5      D7      D9
+ *     D4      D6      D8    
+ *                           
+ * D2    D1          D11  D10
+ */
+const uint8_t PATTERN_LEFT_TO_RIGHT[][GRASS_LED_NUM] = {
+  { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, },
+};
+
+const uint8_t PATTERN_RIGHT_TO_LEFT[][GRASS_LED_NUM] = {
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+};
+
+void Grass::setLeftToRight(void)
+{
+  m_state = 0;
+  m_index = 0;
+}
+
+void Grass::setRightToLeft(void)
+{
+  m_state = 1;
+  m_index = 0;
+}
+
+void Grass::next(void)
+{
+  switch (m_state) {
+  case 0:
+    memcpy(m_data, PATTERN_LEFT_TO_RIGHT[m_index], GRASS_LED_NUM);
+    break;
+  
+  case 1:
+    memcpy(m_data, PATTERN_RIGHT_TO_LEFT[m_index], GRASS_LED_NUM);
+    break;
+
+  default:
+    break;
+  }
+
+  m_index++;
+}
+
 void Grass::update()
 {
   uint8_t data[GRASS_LED_NUM/8 + 1];
