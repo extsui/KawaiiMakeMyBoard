@@ -45,7 +45,19 @@ void Grass::off(uint8_t index)
  *                           
  * D2    D1          D11  D10
  */
-const uint8_t PATTERN_LEFT_TO_RIGHT[][GRASS_LED_NUM] = {
+
+/**
+ * 草LEDの点灯パターン
+ * 
+ * ・左から右へ(1個)
+ * ・右から左へ(1個)
+ * ・左から右へ(3個)
+ * ・右から左へ(3個)
+ * ・両端から真ん中へ
+ * ・
+ */
+
+const uint8_t PATTERN_LEFT_TO_RIGHT_1[][GRASS_LED_NUM] = {
   { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
   { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
   { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, },
@@ -57,9 +69,10 @@ const uint8_t PATTERN_LEFT_TO_RIGHT[][GRASS_LED_NUM] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, },
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, },
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 };
 
-const uint8_t PATTERN_RIGHT_TO_LEFT[][GRASS_LED_NUM] = {
+const uint8_t PATTERN_RIGHT_TO_LEFT_1[][GRASS_LED_NUM] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, },
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, },
   { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, },
@@ -71,17 +84,85 @@ const uint8_t PATTERN_RIGHT_TO_LEFT[][GRASS_LED_NUM] = {
   { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, },
   { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
   { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 };
 
-void Grass::setLeftToRight(void)
+const uint8_t PATTERN_LEFT_TO_RIGHT_3[][GRASS_LED_NUM] = {
+  { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+};
+
+const uint8_t PATTERN_RIGHT_TO_LEFT_3[][GRASS_LED_NUM] = {
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, },
+  { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, },
+  { 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, },
+  { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, },
+  { 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, },
+  { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, },
+  { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, },
+  { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, },
+  { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+};
+
+const uint8_t PATTERN_BOTH_EDGE_TO_MIDDLE[][GRASS_LED_NUM] = {
+  { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, },
+  { 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+  { 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, },
+  { 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, },
+  { 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, },
+  { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+  { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, },
+  { 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, },
+  { 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, },
+  { 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, },
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+};
+
+void Grass::setLeftToRight1(void)
 {
   m_state = 0;
   m_index = 0;
 }
 
-void Grass::setRightToLeft(void)
+void Grass::setRightToLeft1(void)
 {
   m_state = 1;
+  m_index = 0;
+}
+
+void Grass::setLeftToRight3(void)
+{
+  m_state = 2;
+  m_index = 0;
+}
+
+void Grass::setRightToLeft3(void)
+{
+  m_state = 3;
+  m_index = 0;
+}
+
+void Grass::setBothEdgeToMiddle(void)
+{
+  m_state = 4;
   m_index = 0;
 }
 
@@ -89,13 +170,25 @@ void Grass::next(void)
 {
   switch (m_state) {
   case 0:
-    memcpy(m_data, PATTERN_LEFT_TO_RIGHT[m_index], GRASS_LED_NUM);
+    memcpy(m_data, PATTERN_LEFT_TO_RIGHT_1[m_index], GRASS_LED_NUM);
     break;
   
   case 1:
-    memcpy(m_data, PATTERN_RIGHT_TO_LEFT[m_index], GRASS_LED_NUM);
+    memcpy(m_data, PATTERN_RIGHT_TO_LEFT_1[m_index], GRASS_LED_NUM);
     break;
 
+  case 2:
+    memcpy(m_data, PATTERN_LEFT_TO_RIGHT_3[m_index], GRASS_LED_NUM);
+    break;
+  
+  case 3:
+    memcpy(m_data, PATTERN_RIGHT_TO_LEFT_3[m_index], GRASS_LED_NUM);
+    break;
+
+  case 4:
+    memcpy(m_data, PATTERN_BOTH_EDGE_TO_MIDDLE[m_index], GRASS_LED_NUM);
+    break;
+    
   default:
     break;
   }

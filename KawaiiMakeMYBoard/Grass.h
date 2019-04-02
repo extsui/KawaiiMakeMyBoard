@@ -11,8 +11,11 @@ public:
   void on(uint8_t index);
   void off(uint8_t index);
 
-  void setLeftToRight(void);
-  void setRightToLeft(void);
+  void setLeftToRight1(void);
+  void setRightToLeft1(void);
+  void setLeftToRight3(void);
+  void setRightToLeft3(void);
+  void setBothEdgeToMiddle(void);
   
   void update();
   void next();
