@@ -20,7 +20,7 @@ private:
   // 現在のパターン
   const uint8_t (*m_current_pattern)[GRASS_LED_NUM];
   // 現在のパターンのフレーム数
-  //uint8_t m_frame_count;
+  uint8_t m_frame_count;
   // 現在のパターンのフレームのインデックス
   uint8_t m_frame_index;
 };

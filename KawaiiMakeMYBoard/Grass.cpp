@@ -126,6 +126,19 @@ const uint8_t PATTERN_BOTH_EDGE_TO_MIDDLE[][GRASS_LED_NUM] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 };
 
+const uint8_t PATTERN_VIBRATION[][GRASS_LED_NUM] = {
+  { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, },
+  { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, },
+};
+
+const uint8_t PATTERN_ALL_ON[][GRASS_LED_NUM] = {
+  { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+};
+
+const uint8_t PATTERN_ALL_OFF[][GRASS_LED_NUM] = {
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+};
+
 int Grass::set(int pattern)
 {
   // TODO: パターン番号異常の場合は-1を返す
@@ -133,25 +146,44 @@ int Grass::set(int pattern)
   switch (pattern) {
   case 0:
     m_current_pattern = PATTERN_LEFT_TO_RIGHT_1;
-    //m_frame_count = xxx;  // TODO:
+    m_frame_count = sizeof(PATTERN_LEFT_TO_RIGHT_1)/sizeof(PATTERN_LEFT_TO_RIGHT_1[0]);
     break;
   
   case 1:
     m_current_pattern = PATTERN_RIGHT_TO_LEFT_1;
+    m_frame_count = sizeof(PATTERN_RIGHT_TO_LEFT_1)/sizeof(PATTERN_RIGHT_TO_LEFT_1[0]);
     break;
 
   case 2:
     m_current_pattern = PATTERN_LEFT_TO_RIGHT_3;
+    m_frame_count = sizeof(PATTERN_LEFT_TO_RIGHT_3)/sizeof(PATTERN_LEFT_TO_RIGHT_3[0]);
     break;
   
   case 3:
     m_current_pattern = PATTERN_RIGHT_TO_LEFT_3;
+    m_frame_count = sizeof(PATTERN_RIGHT_TO_LEFT_3)/sizeof(PATTERN_RIGHT_TO_LEFT_3[0]);
     break;
 
   case 4:
     m_current_pattern = PATTERN_BOTH_EDGE_TO_MIDDLE;
+    m_frame_count = sizeof(PATTERN_BOTH_EDGE_TO_MIDDLE)/sizeof(PATTERN_BOTH_EDGE_TO_MIDDLE[0]);
     break;
-    
+
+  case 5:
+    m_current_pattern = PATTERN_VIBRATION;
+    m_frame_count = sizeof(PATTERN_VIBRATION)/sizeof(PATTERN_VIBRATION[0]);
+    break;
+
+  case 6:
+    m_current_pattern = PATTERN_ALL_ON;
+    m_frame_count = sizeof(PATTERN_ALL_ON)/sizeof(PATTERN_ALL_ON[0]);
+    break;
+
+  case 7:
+    m_current_pattern = PATTERN_ALL_OFF;
+    m_frame_count = sizeof(PATTERN_ALL_OFF)/sizeof(PATTERN_ALL_OFF[0]);
+    break;
+
   default:
     break;
   }
@@ -165,7 +197,10 @@ void Grass::next(void)
   memcpy(m_data, m_current_pattern[m_frame_index], GRASS_LED_NUM);
   m_frame_index++;
 
-  // TODO: フレーム数を超えたら0に戻す処理を入れる
+  // ループ可能にするためにフレーム数を超えたら先頭フレームに戻す
+  if (m_frame_index >= m_frame_count) {
+    m_frame_index = 0;
+  }
 }
 
 void Grass::update()

@@ -38,7 +38,7 @@ void loop()
   
   Serial.println("loop");
   M5.Lcd.printf("loop");
-
+/*
   grass_front->set(0);
 
   for (int i = 0; i < 12; i++) {
@@ -54,7 +54,7 @@ void loop()
     grass_front->update();
     delay(delay_ms);
   }
-  
+*/
   grass_front->set(2);
 
   for (int i = 0; i < 14; i++) {
@@ -77,5 +77,25 @@ void loop()
     grass_front->next();
     grass_front->update();
     delay(delay_ms);
+  }
+
+  grass_front->set(5);
+
+  for (int i = 0; i < 20; i++) {
+    grass_front->next();
+    grass_front->update();
+    delay(delay_ms);
+  }
+
+  for (int i = 0; i < 3; i++) {
+    grass_front->set(6);
+    grass_front->next();
+    grass_front->update();
+    delay(delay_ms * 4);
+    
+    grass_front->set(7);
+    grass_front->next();
+    grass_front->update();
+    delay(delay_ms * 4);
   }
 }
