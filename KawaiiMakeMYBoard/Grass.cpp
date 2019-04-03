@@ -27,16 +27,6 @@ void Grass::config(uint8_t brightness)
   update();
 }
 
-void Grass::on(uint8_t index)
-{
-  m_data[index] = 1;
-}
-
-void Grass::off(uint8_t index)
-{
-  m_data[index] = 0;
-}
-
 /**
  * 草LED配置
  * 
@@ -136,64 +126,46 @@ const uint8_t PATTERN_BOTH_EDGE_TO_MIDDLE[][GRASS_LED_NUM] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 };
 
-void Grass::setLeftToRight1(void)
+int Grass::set(int pattern)
 {
-  m_state = 0;
-  m_index = 0;
-}
-
-void Grass::setRightToLeft1(void)
-{
-  m_state = 1;
-  m_index = 0;
-}
-
-void Grass::setLeftToRight3(void)
-{
-  m_state = 2;
-  m_index = 0;
-}
-
-void Grass::setRightToLeft3(void)
-{
-  m_state = 3;
-  m_index = 0;
-}
-
-void Grass::setBothEdgeToMiddle(void)
-{
-  m_state = 4;
-  m_index = 0;
-}
-
-void Grass::next(void)
-{
-  switch (m_state) {
+  // TODO: パターン番号異常の場合は-1を返す
+  
+  switch (pattern) {
   case 0:
-    memcpy(m_data, PATTERN_LEFT_TO_RIGHT_1[m_index], GRASS_LED_NUM);
+    m_current_pattern = PATTERN_LEFT_TO_RIGHT_1;
+    //m_frame_count = xxx;  // TODO:
     break;
   
   case 1:
-    memcpy(m_data, PATTERN_RIGHT_TO_LEFT_1[m_index], GRASS_LED_NUM);
+    m_current_pattern = PATTERN_RIGHT_TO_LEFT_1;
     break;
 
   case 2:
-    memcpy(m_data, PATTERN_LEFT_TO_RIGHT_3[m_index], GRASS_LED_NUM);
+    m_current_pattern = PATTERN_LEFT_TO_RIGHT_3;
     break;
   
   case 3:
-    memcpy(m_data, PATTERN_RIGHT_TO_LEFT_3[m_index], GRASS_LED_NUM);
+    m_current_pattern = PATTERN_RIGHT_TO_LEFT_3;
     break;
 
   case 4:
-    memcpy(m_data, PATTERN_BOTH_EDGE_TO_MIDDLE[m_index], GRASS_LED_NUM);
+    m_current_pattern = PATTERN_BOTH_EDGE_TO_MIDDLE;
     break;
     
   default:
     break;
   }
 
-  m_index++;
+  m_frame_index = 0;
+  return 0;
+}
+
+void Grass::next(void)
+{
+  memcpy(m_data, m_current_pattern[m_frame_index], GRASS_LED_NUM);
+  m_frame_index++;
+
+  // TODO: フレーム数を超えたら0に戻す処理を入れる
 }
 
 void Grass::update()
@@ -218,18 +190,3 @@ void Grass::update()
   }
   Wire.endTransmission();
 }
-
-/*
-  if ((0 <= index) && (index <= 7)) {
-    m_data[0] &= ~(1 << (index - 0));
-  }
-  if ((8 <= index) && (index <= 15)) {
-    m_data[1] &= ~(1 << (index - 8));
-  }
-  if ((16 <= index) && (index <= 23)) {
-    m_data[2] &= ~(1 << (index - 16));
-  }
-  if ((24 <= index) && (index <= 31)) {
-    m_data[3] &= ~(1 << (index - 24));
-  }
- */
