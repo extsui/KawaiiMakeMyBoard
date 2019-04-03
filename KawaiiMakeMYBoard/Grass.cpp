@@ -188,19 +188,19 @@ int Grass::set(int pattern)
     break;
   }
 
+  // パターンをセットした時点で表示を更新されても
+  // 問題ないようにするため先頭データを読み込んでおく。
   m_frame_index = 0;
+  next();
+    
   return 0;
 }
 
 void Grass::next(void)
 {
-  memcpy(m_data, m_current_pattern[m_frame_index], GRASS_LED_NUM);
-  m_frame_index++;
-
   // ループ可能にするためにフレーム数を超えたら先頭フレームに戻す
-  if (m_frame_index >= m_frame_count) {
-    m_frame_index = 0;
-  }
+  memcpy(m_data, m_current_pattern[m_frame_index], GRASS_LED_NUM);
+  m_frame_index = (m_frame_index + 1) % m_frame_count;
 }
 
 void Grass::update()
