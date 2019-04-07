@@ -24,22 +24,26 @@ class Grass
 {
 public:
   Grass(uint8_t addr);
+  /** 輝度設定(I2C通信有) */
   void config(uint8_t brightness);
+  /** パターン設定 */
   int set(GrassPattern pattern);
+  /** 現在のパターンの長さ */
+  int length();
+  /** 現在のパターンを進める */
   void next();
+  /** 表示更新(I2C通信有) */
   void update();
 
 private:
-  // I2Cアドレス
+  /** I2Cアドレス */
   uint8_t m_addr;
-  // 現在の設定データ
+  /** 現在の設定データ */
   uint8_t m_data[GRASS_LED_NUM];
-  // 現在のパターン
-  const uint8_t (*m_current_pattern)[GRASS_LED_NUM];
-  // 現在のパターンのフレーム数
-  uint8_t m_frame_count;
-  // 現在のパターンのフレームのインデックス
-  uint8_t m_frame_index;
+  /** 現在のパターンのインデックス */
+  int m_pattern_index;
+  /** 現在のパターンのフレームのインデックス */
+  int m_frame_index;
 };
 
 #endif /* GRASS_H */

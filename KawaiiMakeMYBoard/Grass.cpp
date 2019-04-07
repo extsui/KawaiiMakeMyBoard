@@ -312,6 +312,8 @@ Grass::Grass(uint8_t addr)
 {
   m_addr = addr;
   memset(m_data, 0x00, sizeof(m_data));
+  m_pattern_index = 0;
+  m_frame_index = 0;
 }
 
 void Grass::config(uint8_t brightness)
@@ -339,23 +341,30 @@ int Grass::set(GrassPattern pattern)
   if (pattern >= GRASS_PATTERN_NUM) {
     return -1;
   }
-  
-  m_current_pattern = GRASS_PATTERN_TABLE[pattern].pattern;
-  m_frame_count = GRASS_PATTERN_TABLE[pattern].frame_count;
-  
+
+  m_pattern_index = pattern;
+  m_frame_index = 0;
+
   // パターンをセットした時点で表示を更新されても
   // 問題ないようにするため先頭データを読み込んでおく。
-  m_frame_index = 0;
   next();
     
   return 0;
 }
 
-void Grass::next(void)
+int Grass::length(void)
 {
+  return GRASS_PATTERN_TABLE[m_pattern_index].frame_count;
+}
+
+void Grass::next(void)
+{ 
+  const uint8_t (*current_pattern)[GRASS_LED_NUM] = GRASS_PATTERN_TABLE[m_pattern_index].pattern;
+  int frame_count = GRASS_PATTERN_TABLE[m_pattern_index].frame_count;
+  
   // ループ可能にするためにフレーム数を超えたら先頭フレームに戻す
-  memcpy(m_data, m_current_pattern[m_frame_index], GRASS_LED_NUM);
-  m_frame_index = (m_frame_index + 1) % m_frame_count;
+  memcpy(m_data, current_pattern[m_frame_index], GRASS_LED_NUM);
+  m_frame_index = (m_frame_index + 1) % frame_count;
 }
 
 void Grass::update()
