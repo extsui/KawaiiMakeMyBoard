@@ -243,7 +243,7 @@ static const uint8_t PATTERN_LEFT_TO_RIGHT_BUFFER[][GRASS_LED_NUM] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 };
 
-static const uint8_t PATTERN_RIGHT_TO_LEFT_NEG[][GRASS_LED_NUM] = {
+static const uint8_t PATTERN_LEFT_TO_RIGHT_NEG[][GRASS_LED_NUM] = {
   { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
   { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
   { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, },
@@ -257,6 +257,23 @@ static const uint8_t PATTERN_RIGHT_TO_LEFT_NEG[][GRASS_LED_NUM] = {
   { 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, },
   { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, },
   { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, },
+  { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+};
+
+static const uint8_t PATTERN_RIGHT_TO_LEFT_NEG[][GRASS_LED_NUM] = {
+  { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, },
+  { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, },
+  { 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, },
+  { 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, },
+  { 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, },
+  { 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, },
+  { 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, },
+  { 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, },
+  { 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, },
+  { 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, },
+  { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, },
+  { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+  { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
   { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
 };
 
@@ -300,6 +317,7 @@ static const GrassPatternRecord GRASS_PATTERN_TABLE[] = {
   { PATTERN_BOTH_EDGE_TO_MIDDLE,        12  },
   { PATTERN_VIBRATION,                  2   },
   { PATTERN_LEFT_TO_RIGHT_BUFFER,       134 },
+  { PATTERN_LEFT_TO_RIGHT_NEG,          14  },
   { PATTERN_RIGHT_TO_LEFT_NEG,          14  },
   { PATTERN_LEFT_TO_RIGHT_VERTICAL,     8   },
   { PATTERN_RIGHT_TO_LEFT_VERTICAL,     8   }, 
@@ -388,4 +406,94 @@ void Grass::update()
     Wire.write(data[i]);
   }
   Wire.endTransmission();
+}
+
+/************************************************************
+ *  サンプル
+ ************************************************************/
+void Grass::test()
+{
+  int delay_ms = 100;
+  
+  this->set(GRASS_PATTERN_LEFT_TO_RIGHT_3);
+
+  for (int i = 0; i < this->length(); i++) {
+    this->update();
+    delay(delay_ms);
+    this->next();
+  }
+
+  this->set(GRASS_PATTERN_RIGHT_TO_LEFT_3);
+
+  for (int i = 0; i < this->length(); i++) {
+    this->update();
+    delay(delay_ms);
+    this->next();
+  }
+
+  this->set(GRASS_PATTERN_BOTH_EDGE_TO_MIDDLE);
+
+  for (int i = 0; i < this->length(); i++) {
+    this->update();
+    delay(delay_ms);
+    this->next();
+  }
+
+  this->set(GRASS_PATTERN_VIBRATION);
+
+  for (int i = 0; i < this->length() * 10; i++) {
+    this->update();
+    delay(delay_ms);
+    this->next();
+  }
+
+  for (int i = 0; i < this->length(); i++) {
+    this->set(GRASS_PATTERN_ALL_ON);
+    this->update();
+    delay(delay_ms * 4);
+    
+    this->set(GRASS_PATTERN_ALL_OFF);
+    this->update();
+    delay(delay_ms * 4);
+  }
+  
+  this->set(GRASS_PATTERN_LEFT_TO_RIGHT_BUFFER);
+
+  for (int i = 0; i < this->length(); i++) {
+    this->update();
+    delay(delay_ms / 2);
+    this->next();
+  }
+  
+  this->set(GRASS_PATTERN_LEFT_TO_RIGHT_NEG);
+
+  for (int i = 0; i < this->length(); i++) {
+    this->update();
+    delay(delay_ms);
+    this->next();
+  }
+  
+  this->set(GRASS_PATTERN_RIGHT_TO_LEFT_NEG);
+
+  for (int i = 0; i < this->length(); i++) {
+    this->update();
+    delay(delay_ms);
+    this->next();
+  }
+  
+  this->set(GRASS_PATTERN_LEFT_TO_RIGHT_VERTICAL);
+
+  for (int i = 0; i < this->length(); i++) {
+    this->update();
+    delay(delay_ms / 2);
+    this->next();
+  }
+  
+  this->set(GRASS_PATTERN_RIGHT_TO_LEFT_VERTICAL);
+
+  for (int i = 0; i < this->length(); i++) {
+    this->update();
+    delay(delay_ms / 2);
+    this->next();
+  }
 }

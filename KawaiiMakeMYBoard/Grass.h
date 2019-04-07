@@ -14,6 +14,7 @@ typedef enum {
   GRASS_PATTERN_BOTH_EDGE_TO_MIDDLE,    /**< 両端から真ん中へ */
   GRASS_PATTERN_VIBRATION,              /**< 交互の連続反転 */
   GRASS_PATTERN_LEFT_TO_RIGHT_BUFFER,   /**< 左から右へバッファ */
+  GRASS_PATTERN_LEFT_TO_RIGHT_NEG,      /**< 左から右へ(反転) */
   GRASS_PATTERN_RIGHT_TO_LEFT_NEG,      /**< 右から左へ(反転) */
   GRASS_PATTERN_LEFT_TO_RIGHT_VERTICAL, /**< 左から右へ(縦) */
   GRASS_PATTERN_RIGHT_TO_LEFT_VERTICAL, /**< 右から左へ(縦) */
@@ -34,6 +35,8 @@ public:
   void next();
   /** 表示更新(I2C通信有) */
   void update();
+  /** テスト */
+  void test();
 
 private:
   /** I2Cアドレス */
