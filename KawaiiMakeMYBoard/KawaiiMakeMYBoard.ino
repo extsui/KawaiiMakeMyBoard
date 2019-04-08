@@ -34,6 +34,7 @@ void setup()
 
 void loop()
 {
-  grass_front->test();
-  grass_middle->test();
+  //grass_front->test();
+  //grass_middle->test();
+  tree->test();
 }
