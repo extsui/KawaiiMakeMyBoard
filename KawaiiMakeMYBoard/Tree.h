@@ -5,9 +5,12 @@
 
 /** 草の点灯パターン */
 typedef enum {
-  TREE_PATTERN_ALL_ON = 0,             /**< 全点灯 */
-  TREE_PATTERN_ALL_OFF,                /**< 全消灯 */
-  TREE_PATTERN_TOP_TO_BOTTOM,          /**< 上から下へ */
+  TREE_PATTERN_ALL_ON = 0,                  /**< 全点灯 */
+  TREE_PATTERN_ALL_OFF,                     /**< 全消灯 */
+  TREE_PATTERN_ONE_BY_ONE,                  /**< 1個ずつ */
+  TREE_PATTERN_TOP_TO_BOTTOM_HORIZONTAL_1,  /**< 上から下へ(1行) */
+  TREE_PATTERN_TOP_TO_BOTTOM_HORIZONTAL_3,  /**< 上から下へ(3行) */
+  TREE_PATTERN_TOP_TO_BOTTOM_BUFFER,        /**< 上から下へ(バッファ) */
   TREE_PATTERN_NUM,
 } TreePattern;
 
