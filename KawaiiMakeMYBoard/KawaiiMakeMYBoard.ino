@@ -34,7 +34,8 @@ void setup()
 
 void loop()
 {
+  land->test();
   //grass_front->test();
   //grass_middle->test();
-  tree->test();
+  //tree->test();
 }
