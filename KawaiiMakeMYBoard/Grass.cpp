@@ -388,17 +388,21 @@ void Grass::next(void)
 void Grass::update()
 {
   uint8_t data[GRASS_LED_NUM/8 + 1];
-
+  
   memset(data, 0, sizeof(data));
   
-  // m_data[0]をdata[0]の0bit目とする
-  for (int i = 0; i < sizeof(data); i++) {
-    for (int bit = 0; bit < 8; bit++) {
-      if (m_data[i*8 + bit] == 1) {
-        data[i] |= (1<<bit);
-      }
-    }
-  }
+  data[0] |= ((m_data[0] == 1) ? 0x01 : 0);
+  data[0] |= ((m_data[1] == 1) ? 0x02 : 0);
+  data[0] |= ((m_data[2] == 1) ? 0x04 : 0);
+  data[0] |= ((m_data[3] == 1) ? 0x08 : 0);
+  data[0] |= ((m_data[4] == 1) ? 0x10 : 0);
+  data[0] |= ((m_data[5] == 1) ? 0x20 : 0);
+  data[0] |= ((m_data[6] == 1) ? 0x40 : 0);
+  data[0] |= ((m_data[7] == 1) ? 0x80 : 0);
+  
+  data[1] |= ((m_data[8]  == 1) ? 0x01 : 0);
+  data[1] |= ((m_data[9]  == 1) ? 0x02 : 0);
+  data[1] |= ((m_data[10] == 1) ? 0x04 : 0);
   
   Wire.beginTransmission(m_addr);
   Wire.write(0x00);
