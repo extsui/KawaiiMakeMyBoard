@@ -11,6 +11,11 @@ typedef enum {
   TREE_PATTERN_TOP_TO_BOTTOM_HORIZONTAL_1,  /**< 上から下へ(1行) */
   TREE_PATTERN_TOP_TO_BOTTOM_HORIZONTAL_3,  /**< 上から下へ(3行) */
   TREE_PATTERN_TOP_TO_BOTTOM_BUFFER,        /**< 上から下へ(バッファ) */
+  TREE_PATTERN_UPPER_LEFT_TO_RIGHT,         /**< 左上から右へ */
+  TREE_PATTERN_UPPER_RIGHT_TO_LEFT,         /**< 右上から左へ */
+  TREE_PATTERN_LOWER_LEFT_TO_RIGHT,         /**< 左下から右へ */
+  TREE_PATTERN_LOWER_RIGHT_TO_LEFT,         /**< 右下から左へ */
+  TREE_PATTERN_CANDLE,                      /**< 蝋燭 */
   TREE_PATTERN_NUM,
 } TreePattern;
 
