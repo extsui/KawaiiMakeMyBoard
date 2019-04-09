@@ -8,6 +8,7 @@ typedef enum {
   LAND_PATTERN_ALL_ON = 0,                  /**< 全点灯 */
   LAND_PATTERN_ALL_OFF,                     /**< 全消灯 */
   LAND_PATTERN_ONE_BY_ONE,                  /**< 1個ずつ */
+  LAND_PATTERN_STREAM,                      /**< 小川 */
   LAND_PATTERN_NUM,
 } LandPattern;
 
