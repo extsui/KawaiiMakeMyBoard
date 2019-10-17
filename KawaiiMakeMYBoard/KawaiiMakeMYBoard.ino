@@ -4,6 +4,7 @@
 #include "Tree.h"
 #include "Grass.h"
 #include "Land.h"
+#include "BluetoothSerial.h"
 
 #define KMMB_VERSION  "v0.1"
 
@@ -11,6 +12,8 @@ Land *land;
 Grass *grass_front;
 Grass *grass_middle;
 Tree *tree;
+
+BluetoothSerial bts;
 
 void setup()
 {
@@ -39,6 +42,9 @@ void setup()
 
   M5.Lcd.fillScreen(ILI9341_BLACK);
 
+  // Bluetooth初期化
+  bts.begin("M5Stack"); // Bluetoothデバイスで表示される名前
+  
   Serial.print("OK.\n");
 }
 
@@ -72,7 +78,7 @@ void loop()
   uint32_t current_time_ms;
   
   current_time_ms = millis();
-
+  /*
   // 一定周期でエフェクト更新
   if (next_update_time_ms <= current_time_ms) {
     next_update_time_ms += 5000;
@@ -82,6 +88,37 @@ void loop()
     patterns[1] = random(0, GRASS_PATTERN_NUM);
     patterns[2] = random(0, GRASS_PATTERN_NUM);
     patterns[3] = random(0, TREE_PATTERN_NUM);
+
+    land->set((LandPattern)patterns[0]);
+    grass_front->set((GrassPattern)patterns[1]);
+    grass_middle->set((GrassPattern)patterns[2]);
+    tree->set((TreePattern)patterns[3]);
+
+    drawScreen(patterns);
+  } else {
+    step();
+  }
+  */
+
+  // Bluetooth経由操作のサンプル
+  if (bts.available()) {
+    static uint8_t patterns[4] = { 0 };
+    uint8_t recvdata;
+    uint8_t part;
+    uint8_t pattern;
+    
+    // 上位4bitが部品指定で下位4bitがパターン番号
+    recvdata = bts.read();
+    part = ((recvdata & 0xF0) >> 4) - 1;
+    pattern = (recvdata & 0x0F);
+    
+    Serial.print(recvdata, HEX);
+
+    if (part < 4) {
+      patterns[part] = pattern;
+    } else {
+      Serial.println("NG Pattern");
+    }
 
     land->set((LandPattern)patterns[0]);
     grass_front->set((GrassPattern)patterns[1]);
